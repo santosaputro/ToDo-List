@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>To Do List WIth VueJS</title>
+</head>
+<body>
+	<div id="app">
+		<p name="question">apa yang bisa kita bantu ??</p>
+		<!-- <p v-if="lists.length === 0">No List</p> -->
+		<p v-if="lists.length === 0"></p>
+		<ul>
+			<li v-for="list in lists">{{ list }} | <a href="#" @click="deleteList(list)">Delete</a>
+				<input type="text" name="list" v-model="list" readonly>
+			</li>
+		</ul>
+
+		{{ list }} <br>
+
+		<input type="text" name="list" v-model="list" @keyup.enter="addList">
+		<input type="button" @click="addList" value="add list">
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+	<script type="text/javascript">
+		new Vue({
+			el: '#app',
+			data: {
+				lists: [],
+				list: ''
+			},
+			methods: {
+				addList() {
+					this.lists.push(this.list)
+					localStorage.setItem('lists', JSON.stringify(this.lists)) //save local storage
+
+					this.list = ''
+				},
+				deleteList(list) {
+					const index = this.lists.indexOf(list)
+					this.lists.splice(index, 1)
+					localStorage.setItem('lists', JSON.stringify(this.lists)) //save local storage
+				}
+			},
+			created() {
+				this.lists = JSON.parse(localStorage.getItem('lists')) || []
+			}
+		});
+	</script>
+</body>
+</html>
